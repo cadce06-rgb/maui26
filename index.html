@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Phil & Tracy — Maui 2026</title>
+<meta name="description" content="Phil & Tracy's Maui itinerary — Kahana Falls, July 23-30 2026">
+
+<!-- Home screen / PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F6F1E4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Maui Trip">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+
+<style>
+  :root{
+    --ink:#16262B;
+    --teal:#1C7C6E;
+    --teal-dark:#124E45;
+    --coral:#E1613A;
+    --sand:#F6F1E4;
+    --mist:#E4EEEA;
+    --white:#FFFFFF;
+    --line:rgba(22,38,43,0.14);
+    --display: "Iowan Old Style","Palatino Linotype",Georgia,serif;
+    --body: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--sand);
+    color:var(--ink);
+    font-family:var(--body);
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:64px;
+  }
+  a{color:inherit;}
+
+  /* ---------- Header ---------- */
+  header.hero{
+    padding:28px 20px 22px;
+    background:var(--ink);
+    color:var(--sand);
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero .wave{
+    position:absolute; left:0; right:0; bottom:-1px; height:26px;
+    background:var(--sand);
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 40'><path d='M0 20 Q 25 0 50 20 T 100 20 T 150 20 T 200 20 T 250 20 T 300 20 T 350 20 T 400 20 T 450 20 T 500 20 T 550 20 T 600 20 V40 H0 Z'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 40'><path d='M0 20 Q 25 0 50 20 T 100 20 T 150 20 T 200 20 T 250 20 T 300 20 T 350 20 T 400 20 T 450 20 T 500 20 T 550 20 T 600 20 V40 H0 Z'/></svg>");
+    -webkit-mask-size:200px 26px; mask-size:200px 26px;
+    -webkit-mask-repeat:repeat-x; mask-repeat:repeat-x;
+  }
+  .eyebrow{
+    font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:#8FC9BC; font-weight:600; margin:0 0 6px;
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:500;
+    font-size:clamp(28px,7vw,38px);
+    margin:0 0 4px;
+    line-height:1.1;
+  }
+  .hero-sub{ font-size:14.5px; color:#C9D6D2; margin:0 0 18px; }
+  .countdown{
+    display:flex; align-items:baseline; gap:10px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:12px; padding:10px 14px; width:fit-content;
+  }
+  .countdown .num{ font-family:var(--display); font-size:26px; color:#FFDCC9; }
+  .countdown .txt{ font-size:13px; color:#C9D6D2; }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    display:flex; gap:8px; padding:14px 20px 4px; align-items:center;
+  }
+  button.btn{
+    font-family:var(--body); font-size:13.5px; font-weight:600;
+    border:1px solid var(--line); background:var(--white); color:var(--ink);
+    padding:9px 14px; border-radius:999px; cursor:pointer;
+  }
+  button.btn.primary{ background:var(--teal); color:var(--white); border-color:var(--teal); }
+  button.btn:active{ transform:scale(.97); }
+
+  /* ---------- Sections ---------- */
+  main{ padding:6px 20px 20px; max-width:640px; margin:0 auto; }
+  section.block{ margin-top:22px; }
+  h2.section-title{
+    font-family:var(--display); font-weight:500; font-size:20px;
+    margin:0 0 10px; display:flex; align-items:center; gap:8px;
+  }
+  .section-title .count{
+    font-family:var(--body); font-size:12px; font-weight:700;
+    background:var(--coral); color:#fff; border-radius:999px;
+    padding:2px 8px;
+  }
+
+  /* ---------- Reservations checklist ---------- */
+  .checklist{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    overflow:hidden;
+  }
+  .check-row{
+    display:flex; align-items:flex-start; gap:12px;
+    padding:13px 14px; border-bottom:1px solid var(--line);
+  }
+  .check-row:last-child{ border-bottom:none; }
+  .check-row input[type=checkbox]{
+    width:20px; height:20px; margin-top:1px; accent-color:var(--teal); flex-shrink:0;
+  }
+  .check-row label{ font-size:14.5px; line-height:1.4; flex:1; }
+  .check-row.done label{ text-decoration:line-through; color:#8C9A96; }
+  .check-row .how{ display:block; font-size:12.5px; color:var(--teal-dark); margin-top:2px; font-weight:600; }
+
+  /* ---------- Day cards ---------- */
+  .day-card{
+    background:var(--white); border:1px solid var(--line); border-radius:16px;
+    margin-bottom:12px; overflow:hidden;
+  }
+  .day-head{
+    display:flex; align-items:center; gap:12px; padding:14px 14px;
+    cursor:pointer; -webkit-tap-highlight-color:transparent;
+  }
+  .day-badge{
+    font-family:var(--display); font-size:13px; font-weight:600;
+    background:var(--mist); color:var(--teal-dark);
+    border-radius:10px; padding:6px 9px; text-align:center; min-width:52px;
+    line-height:1.15;
+  }
+  .day-badge .dow{ display:block; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--teal); }
+  .day-title-wrap{ flex:1; min-width:0; }
+  .day-title{ font-family:var(--display); font-size:17px; font-weight:600; margin:0; }
+  .day-theme{ font-size:12.5px; color:#5C6B67; margin-top:1px; }
+  .res-badge{
+    background:var(--coral); color:#fff; font-size:10.5px; font-weight:700;
+    letter-spacing:.04em; text-transform:uppercase; border-radius:999px;
+    padding:4px 8px; white-space:nowrap; flex-shrink:0;
+  }
+  .chevron{
+    width:11px; height:11px; border-right:2px solid #B9C4C0; border-bottom:2px solid #B9C4C0;
+    transform:rotate(-45deg); transition:transform .2s ease; flex-shrink:0; margin-right:2px;
+  }
+  .day-card.open .chevron{ transform:rotate(45deg); }
+
+  .day-body{ display:none; padding:0 14px 16px; }
+  .day-card.open .day-body{ display:block; }
+
+  .activity{
+    display:flex; gap:10px; padding:9px 0; border-top:1px dashed var(--line);
+  }
+  .activity:first-child{ border-top:none; padding-top:2px; }
+  .activity .time{
+    font-size:11.5px; font-weight:700; color:var(--teal); width:52px; flex-shrink:0; padding-top:2px;
+  }
+  .activity .what{ flex:1; font-size:14px; line-height:1.45; }
+  .maps-pin{
+    display:inline-flex; align-items:center; gap:4px; margin-left:6px;
+    font-size:12px; font-weight:600; color:var(--teal-dark);
+    border:1px solid var(--teal); border-radius:999px; padding:2px 8px 2px 6px;
+    text-decoration:none; white-space:nowrap;
+  }
+  .maps-pin svg{ width:11px; height:11px; }
+
+  .tidbit{
+    margin-top:10px; background:var(--mist); border-radius:12px; padding:10px 12px;
+    font-size:12.5px; line-height:1.5; color:var(--ink);
+  }
+  .tidbit b{ color:var(--teal-dark); }
+
+  .warning{
+    margin-top:8px; background:#FCEBE3; border:1px solid var(--coral); border-radius:12px;
+    padding:10px 12px; font-size:12.5px; line-height:1.5; color:var(--ink);
+    display:flex; gap:8px; align-items:flex-start;
+  }
+  .warning .flag{ flex-shrink:0; font-size:13px; }
+
+  footer{ text-align:center; font-size:11.5px; color:#8C9A96; padding:24px 20px 0; }
+
+  /* ---------- Print ---------- */
+  .print-only{ display:none; }
+  @media print{
+    header.hero, .toolbar, .day-card, footer{ display:none !important; }
+    .print-only{ display:block !important; }
+    body{ background:#fff; padding:0; }
+    main{ padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="eyebrow">Kahana Falls · West Maui</p>
+  <h1>Phil &amp; Tracy in Maui</h1>
+  <p class="hero-sub">Thu Jul 23 – Thu Jul 30, 2026 · 4260 Lower Honoapiʻilani Rd, Lahaina</p>
+  <div class="countdown" id="countdown">
+    <span class="num" id="countdownNum">–</span>
+    <span class="txt" id="countdownTxt">days until wheels down at OGG</span>
+  </div>
+  <div class="wave"></div>
+</header>
+
+<div class="toolbar">
+  <button class="btn primary" onclick="window.print()">🖨️ Print one-pager</button>
+</div>
+
+<main>
+
+  <section class="block">
+    <h2 class="section-title">Reservations checklist <span class="count" id="resCount">0</span></h2>
+    <div class="checklist" id="checklist">
+      <div class="check-row">
+        <input type="checkbox" id="r1"><label for="r1">Mama's Fish House — Sun 7/26 dinner
+          <span class="how">Call 808-579-8488</span></label>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="r2"><label for="r2">Merriman's Kapalua — Mon 7/27 birthday dinner
+          <span class="how">Book via website / OpenTable</span></label>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="r3"><label for="r3">Molokini snorkel cruise — Mon 7/27 morning (if choosing)
+          <span class="how">Book online, Ma'alaea Harbor departure</span></label>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="r4"><label for="r4">King's Tide tattoo appointment — Wed 7/29
+          <span class="how">Book at kingstidestudio.com</span></label>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="section-title">Day by day</h2>
+    <div id="days"></div>
+  </section>
+
+  <footer>Tap a day to expand · Tap a pin to open in Maps</footer>
+
+  <!-- ============ PRINT-ONLY ONE-PAGER ============ -->
+  <div class="print-only" id="printSheet"></div>
+</main>
+
+<script>
+const MAPS = q => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+
+const days = [
+  {
+    dow:"Thu", date:"Jul 23", title:"Arrival", theme:"Getting to Kahana Falls",
+    activities:[
+      {t:"4:10p", w:"Land OGG — Southwest WN3849/WN3060 via OAK", map:"Kahului Airport OGG, Maui HI"},
+      {t:"", w:"Thrifty Jeep pickup at OGG", map:"Thrifty Car Rental Kahului Airport, Maui HI"},
+      {t:"3:00p", w:"Kahana Falls check-in — 4260 Lower Honoapiʻilani Rd, Lahaina", map:"Kahana Falls Resort, 4260 Lower Honoapiilani Rd, Lahaina, HI 96761"},
+      {t:"", w:"Casual dinner nearby", map:"restaurants near Kahana, Maui HI"}
+    ],
+    tidbit:"<b>Know before you go:</b> OGG to Kahana is about 25–30 min along the coast road — the Jeep's a good call, parking at Kahana Falls is easy, and the resort sits right across from the beach for a first sunset."
+  },
+  {
+    dow:"Fri", date:"Jul 24", title:"Easy day", theme:"Bay hopping",
+    activities:[
+      {t:"", w:"Napili Bay snorkel + lunch at Napili Market (poke)", map:"Napili Bay, Maui HI"},
+      {t:"", w:"Napili Market", map:"Napili Market, Maui HI"},
+      {t:"", w:"Kapalua Bay afternoon swim", map:"Kapalua Bay, Maui HI"}
+    ],
+    tidbit:"<b>Know before you go:</b> Napili Bay's sandy, gently sloped entry makes it one of the easiest snorkel spots on this coast — mornings are calmest before the trade winds pick up chop in the afternoon."
+  },
+  {
+    dow:"Sat", date:"Jul 25", title:"Adventure #1", theme:"Kahekili coast",
+    activities:[
+      {t:"8–12p", w:"Napili Farmers Market", map:"Napili Farmers Market, Maui HI"},
+      {t:"", w:"Kahekili Hwy drive to Nakalele Blowhole", map:"Nakalele Blowhole, Maui HI"},
+      {t:"dinner", w:"Joey's Kitchen, Napili Plaza", map:"Joey's Kitchen, Napili Plaza, Maui HI"}
+    ],
+    tidbit:"<b>Know before you go:</b> Kahekili Highway narrows to one lane with blind cliffside curves past Nakalele — go slow, use the pullouts, and keep a healthy distance back from the blowhole itself (it's launched people before).",
+    warning:"Cell service disappears past Honolua Bay and stays out for much of the drive. Download the offline Google Maps area for this route before you leave Kapalua, and fill the gas tank first — there's nothing along the way."
+  },
+  {
+    dow:"Sun", date:"Jul 26", title:"Adventure #2", theme:"North Shore", reservation:true,
+    activities:[
+      {t:"", w:"Hoʻokipa Lookout — surf/turtle photography (bring the 100-400mm)", map:"Hoʻokipa Lookout, Maui HI"},
+      {t:"", w:"Kanaha Pond Wildlife Sanctuary", map:"Kanaha Pond State Wildlife Sanctuary, Maui HI"},
+      {t:"lunch", w:"Paia Fish Market", map:"Paia Fish Market, Paia, HI"},
+      {t:"dinner", w:"Mama's Fish House — call 808-579-8488 (returning guests — celebrated your 1st anniversary here!) · backup: Hali'imaile General Store", map:"Mama's Fish House, Paia, HI"}
+    ],
+    tidbit:"<b>Know before you go:</b> Hoʻokipa is a green sea turtle basking beach most afternoons — stay 10+ ft back, they're federally protected. Mama's books out weeks ahead in July, so call as early as you can."
+  },
+  {
+    dow:"Mon", date:"Jul 27", title:"Birthday", theme:"60th + 1-year sober anniversary 🎉", reservation:true,
+    activities:[
+      {t:"am", w:"Molokini snorkel cruise (Ma'alaea Harbor) OR relaxed Honolua Bay", map:"Maalaea Harbor, Maui HI"},
+      {t:"", w:"Rest afternoon", map:""},
+      {t:"dinner", w:"Merriman's Kapalua — book via website/OpenTable", map:"Merriman's Kapalua, Maui HI"}
+    ],
+    tidbit:"<b>Know before you go:</b> Molokini's crescent crater rim gives some of the clearest water in Hawai'i — 150 ft+ visibility on a good day. Worth the early boat call if the morning swell is calm."
+  },
+  {
+    dow:"Tue", date:"Jul 28", title:"Easy day", theme:"Honolua & noodles",
+    activities:[
+      {t:"", w:"Honolua Bay snorkel", map:"Honolua Bay, Maui HI"},
+      {t:"lunch", w:"Star Noodle", map:"Star Noodle, Lahaina, HI"},
+      {t:"dinner", w:"Honokowai Okazuya & Deli · backup: Kalei's", map:"Honokowai Okazuya & Deli, 3600 Lower Honoapiilani Rd, Lahaina, HI 96761"}
+    ],
+    tidbit:"<b>Know before you go:</b> Honolua Bay is a Marine Life Conservation District — no touching reef or fish, and it's cash/no-facilities, so bring what you need. Star Noodle gets a lunch line by 11:45."
+  },
+  {
+    dow:"Wed", date:"Jul 29", title:"Market + tattoo", theme:"If doing it", reservation:true,
+    activities:[
+      {t:"8–12p", w:"Napili Farmers Market", map:"Napili Farmers Market, Maui HI"},
+      {t:"", w:"King's Tide Tattoo Studio appointment (first tattoos, tentative)", map:"King's Tide Tattoo Studio, 219 Kupuohi St, Lahaina, HI 96761"},
+      {t:"lunch", w:"Star Noodle", map:"Star Noodle, Lahaina, HI"},
+      {t:"eve", w:"Quiet evening — no ocean/pool submersion if tattoo happens", map:""}
+    ],
+    tidbit:"<b>Know before you go:</b> King's Tide is a newer gallery-style studio in Lahaina — book ahead at kingstidestudio.com. Standard aftercare is no soaking (ocean, pool, or bath) for about 2 weeks."
+  },
+  {
+    dow:"Thu", date:"Jul 30", title:"Departure", theme:"Aloha for now",
+    activities:[
+      {t:"11:00a", w:"Checkout", map:"Kahana Falls Resort, 4260 Lower Honoapiilani Rd, Lahaina, HI 96761"},
+      {t:"", w:"Head to OGG", map:"Kahului Airport OGG, Maui HI"}
+    ],
+    tidbit:"<b>Know before you go:</b> Give yourself extra runway to fill the Jeep's tank near the airport — the Thrifty lot is a couple minutes off-site so budget 20 min for return + shuttle."
+  }
+];
+
+function pinIcon(){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
+}
+
+function render(){
+  const wrap = document.getElementById('days');
+  days.forEach((d, i)=>{
+    const card = document.createElement('div');
+    card.className = 'day-card';
+    card.innerHTML = `
+      <div class="day-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge">${d.date}<span class="dow">${d.dow}</span></div>
+        <div class="day-title-wrap">
+          <p class="day-title">${d.title}</p>
+          <p class="day-theme">${d.theme}</p>
+        </div>
+        ${d.reservation ? '<span class="res-badge">Reserve</span>' : ''}
+        <span class="chevron"></span>
+      </div>
+      <div class="day-body">
+        ${d.activities.map(a=>`
+          <div class="activity">
+            <div class="time">${a.t||''}</div>
+            <div class="what">${a.w}${a.map ? ` <a class="maps-pin" target="_blank" rel="noopener" href="${MAPS(a.map)}">${pinIcon()} Map</a>`:''}</div>
+          </div>
+        `).join('')}
+        <div class="tidbit">${d.tidbit}</div>
+        ${d.warning ? `<div class="warning"><span class="flag">📵</span><span><b>No signal:</b> ${d.warning}</span></div>` : ''}
+      </div>
+    `;
+    wrap.appendChild(card);
+  });
+
+  // open day 1 by default
+  wrap.firstElementChild.classList.add('open');
+
+  buildPrintSheet();
+  setupChecklist();
+  setupCountdown();
+}
+
+function buildPrintSheet(){
+  const el = document.getElementById('printSheet');
+  let html = `<div style="font-family:Georgia,serif;padding:24px;">
+    <h1 style="margin:0 0 2px;font-size:22px;">Phil &amp; Tracy — Maui, Jul 23–30 2026</h1>
+    <p style="margin:0 0 14px;font-size:12px;color:#444;">Kahana Falls · 4260 Lower Honoapiʻilani Rd, Lahaina</p>
+    <h2 style="font-size:14px;border-bottom:1px solid #999;padding-bottom:4px;">Reservations checklist</h2>
+    <ul style="font-size:12px;line-height:1.6;margin:0 0 16px;padding-left:18px;">
+      <li>Mama's Fish House — call 808-579-8488</li>
+      <li>Merriman's Kapalua — book online</li>
+      <li>Molokini cruise (if choosing) — book online</li>
+      <li>King's Tide tattoo — book at kingstidestudio.com</li>
+    </ul>`;
+  days.forEach(d=>{
+    html += `<div style="margin-bottom:10px;">
+      <h3 style="font-size:13px;margin:0 0 2px;">${d.dow} ${d.date} — ${d.title}${d.reservation?' [RESERVATION]':''}</h3>
+      <p style="font-size:11.5px;margin:0;color:#333;line-height:1.5;">${d.activities.map(a=>a.w).join(' · ')}</p>
+    </div>`;
+  });
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
+function setupChecklist(){
+  const boxes = document.querySelectorAll('#checklist input[type=checkbox]');
+  const saved = JSON.parse(localStorage.getItem('mauiRes')||'{}');
+  boxes.forEach(b=>{
+    if(saved[b.id]) b.checked = true;
+    b.closest('.check-row').classList.toggle('done', b.checked);
+    b.addEventListener('change', ()=>{
+      const state = JSON.parse(localStorage.getItem('mauiRes')||'{}');
+      state[b.id] = b.checked;
+      localStorage.setItem('mauiRes', JSON.stringify(state));
+      b.closest('.check-row').classList.toggle('done', b.checked);
+      updateCount();
+    });
+  });
+  updateCount();
+}
+function updateCount(){
+  const boxes = document.querySelectorAll('#checklist input[type=checkbox]');
+  const done = [...boxes].filter(b=>b.checked).length;
+  document.getElementById('resCount').textContent = `${done}/${boxes.length}`;
+}
+
+function setupCountdown(){
+  const target = new Date('2026-07-23T00:00:00-10:00');
+  const now = new Date();
+  const diffDays = Math.ceil((target - now) / 86400000);
+  const numEl = document.getElementById('countdownNum');
+  const txtEl = document.getElementById('countdownTxt');
+  if(diffDays > 0){
+    numEl.textContent = diffDays;
+    txtEl.textContent = diffDays === 1 ? 'day until wheels down at OGG' : 'days until wheels down at OGG';
+  } else if(diffDays === 0){
+    numEl.textContent = '🌺';
+    txtEl.textContent = 'Aloha — travel day is here!';
+  } else {
+    const tripEnd = new Date('2026-07-30T23:59:59-10:00');
+    if(now <= tripEnd){
+      numEl.textContent = '🏝️';
+      txtEl.textContent = 'You\'re in Maui right now!';
+    } else {
+      numEl.textContent = '✓';
+      txtEl.textContent = 'Trip complete — hope it was unforgettable';
+    }
+  }
+}
+
+render();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
